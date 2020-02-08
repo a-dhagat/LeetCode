@@ -24,7 +24,9 @@ public:
     LinkedList(Node*);
     void push(int new_data);
     void insert(int new_data, int pos);
+    int length();
     void remove(int pos);
+    void delete_list();
     int search_data(int some_data);
     auto at_pos(int pos);
     auto at_reverse_pos(int pos);
@@ -74,6 +76,17 @@ void LinkedList::insert(int new_data, int pos)
     }
 }
 
+int LinkedList::length()
+{
+    int len = 0;
+    LinkedList* current;
+    for(current = head; current!=nullptr; current=(LinkedList*)current->next)
+        len += 1;
+    
+    std::cout << "Length is: " << len << std::endl;
+    return len;
+}
+
 void LinkedList::remove(int pos)
 {
     LinkedList* current = head;
@@ -97,6 +110,20 @@ void LinkedList::remove(int pos)
             current = (LinkedList*)current->next;
         }
     }
+}
+
+void LinkedList::delete_list()
+{
+    LinkedList* current = *head_ref;
+    LinkedList* next = nullptr;
+
+    while (current!=nullptr)
+    {
+        next = (LinkedList*)current->next;
+        free(current);
+        current = next;
+    }
+    *head_ref = nullptr;
 }
 
 int LinkedList::search_data(int some_data)
@@ -174,21 +201,35 @@ void LinkedList::print_Linked_List()
 
 int main()
 {
-    // Create a linked list
+    // Create a new node
     Node n;
     Node* new_node = n.create_Node(10);
+    
+    // Constructing a new linked-list
     LinkedList l(new_node);
     
-    // Add a new node
+    // Add new nodes
     l.push(20);
     l.push(40);
     l.insert(30,1);
+    l.length();
     l.print_Linked_List();
-    l.remove(3);
-    l.print_Linked_List();
+    
+    
+    // Searching data, position
     int position = l.search_data(10);
     auto data = l.at_pos(1);
     auto data1 = l.at_reverse_pos(2);
+    
+    // Removing a node
+    l.remove(3);
+    l.length();
+    l.print_Linked_List();
+
+    // Deleting the list
+    l.delete_list();
+    l.print_Linked_List();
+    l.length();
 
     return 0;
 }
